@@ -1,0 +1,134 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movies</title>
+  <style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.4)),url('https://img.freepik.com/free-photo/movie-background-collage_23-2149876028.jpg'); /* Replace 'background.jpg' with your image file */
+      background-size: cover; /* This will cover the entire viewport */
+      background-repeat: no-repeat; /* Prevent the image from repeating */
+      background-attachment: fixed;
+      
+    }
+
+    .container {
+      width: 90%; /* Adjust width for responsiveness */
+      max-width: 600px;
+      text-align: center;
+      padding: 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column; /* Align content vertically */
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0 0 1rem;
+      color:aliceblue; /* Add margin below the heading */
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-bottom: 1rem; /* Add margin between input and button */
+    }
+    input[type="text"]:hover{
+      background-color:gray;
+    }
+
+    button[type="submit"] {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #555;
+    }
+    .movie-details {
+      background-color: white;
+      padding: 3rem;
+      margin-top: 20px; /* Add margin at the top to separate it from the search form */
+    }
+  </style>
+</head>
+<body>
+<div class="class1">
+  <h1>Welcome to the Movie Interface</h1><br><br>
+  
+  <!-- Movie search form -->
+  <form id="movie-form">
+    <label for="movie-title">Enter Movie Title:</label><br>
+    <input type="text" id="movie-title" required><br>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+  <!-- Display fetched movie details -->
+  <div id="movie-details">
+    <!-- Fetched movie details will be displayed here -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const movieForm = document.getElementById('movie-form');
+    const movieDetailsDiv = document.getElementById('movie-details');
+  
+    movieForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const movieTitle = document.getElementById('movie-title').value;
+  
+      try {
+        const response = await axios.get(`http://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=7029b49c`);
+        
+        const movieData = response.data;
+        if (movieData.Response === 'True') {
+          // Display fetched movie details with a white background
+          const movieHTML = `
+            <div class="movie-details">
+              <h2>${movieData.Title}</h2>
+              <p>Year: ${movieData.Year}</p>
+              <p>Director: ${movieData.Director}</p>
+              <!-- Add more information as needed -->
+            </div>
+          `;
+          movieDetailsDiv.innerHTML = movieHTML;
+        } else {
+          movieDetailsDiv.innerHTML = '<p>Movie not found</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching movie:', error);
+      }
+    });
+  </script>
+  
+</body>
+</html>
